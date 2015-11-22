@@ -29,15 +29,22 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm8s_it.h"
+#include "adpcm.h"
 
 /** @addtogroup Template_Project
   * @{
   */
 
+extern	u8 circSampleBuffer[];
+extern u16 firstToRead;
+extern u16 nextToWrite;
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+tTwoByte newSample;
+
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 /* Public functions ----------------------------------------------------------*/
@@ -229,6 +236,37 @@ INTERRUPT_HANDLER(TIM1_UPD_OVF_TRG_BRK_IRQHandler, 11)
   /* In order to detect unexpected events during development,
      it is recommended to set a breakpoint on the following instruction.
   */
+  u16 pcmSample;
+  u8  adpcmSample;
+  static u8 nibble = 1;
+
+  SetBit(GPIOB->ODR,0);
+
+  // clear update flag
+  ClrBit(TIM1->SR1,0);
+
+  if (firstToRead != nextToWrite){ // check if some data is available in the buffer
+
+    if (nibble) {
+      adpcmSample = (u8)(circSampleBuffer[firstToRead] >> 4);
+    }
+    else {
+      adpcmSample = (u8)(circSampleBuffer[firstToRead] & 0x0F);
+      firstToRead = (++firstToRead) & (u16)CIRC_BUFF_MSK; 
+    }
+    nibble = (u8)(!nibble);
+    pcmSample = ADPCMDecoder(adpcmSample);
+    // update sample
+    newSample.uShort = (u16)32768 + pcmSample;
+    TIM1->CCR3L = newSample.uBytes[1]; //LSB
+    TIM1->CCR4L = newSample.uBytes[0]; //MSB
+  }
+  else { //end of buffer, try to update sample value next interrupt;
+    firstToRead;
+  }
+
+  ClrBit(GPIOB->ODR,0);
+  return;
 }
 
 /**

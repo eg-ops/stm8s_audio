@@ -54,15 +54,15 @@ void TIM1_Init (void)
     TIM1->CR1 = TIM1_CR1_ARPE;
     // prescaler to fclk/1
     TIM1->PSCRH = 0x00;
-		TIM1->PSCRL = 0x00;
+    TIM1->PSCRL = 0x00;
 
-		// auto-reload value set to 256 pulse of HSI
-		TIM1->ARRH = 0x00; TIM1->ARRL = 0xFF;
-    		 
-		TIM1->RCR = 0x03; // every fourth PWN half period will be updated i.e. 16MHz/256/4 = 15625 kHz
-		//TIM1->RCR = 0x02; // every third PWN half period will be updated i.e. 16MHz/256/3
-		
-		// capture/compare enable registers
+    // auto-reload value set to 256 pulse of HSI
+    TIM1->ARRH = 0x00; TIM1->ARRL = 0xFF;
+     
+    TIM1->RCR = 0x03; // every fourth PWN half period will be updated i.e. 16MHz/256/4 = 15625 kHz
+    //TIM1->RCR = 0x02; // every third PWN half period will be updated i.e. 16MHz/256/3
+    
+    // capture/compare enable registers
     TIM1->CCER1 = 0x00;
     TIM1->CCER2 = 0x00;
     // capture/compare mode registers (CC3, CC4 to PWM mode 1, preload enabled)
@@ -83,15 +83,15 @@ void TIM1_Init (void)
 
 		// enable CC3, CC4 output
     SetBit(TIM1->CCER2,0);
-		SetBit(TIM1->CCER2,4);
+    SetBit(TIM1->CCER2,4);
 
     // capture/compare registers (CC1 PWM duty 50%)
     TIM1->CCR1H = 0x00; TIM1->CCR1L = 0x80;
     TIM1->CCR2H = 0x00; TIM1->CCR2L = 0x80;
     TIM1->CCR3H = 0x00; TIM1->CCR3L = 0x80;
-		TIM1->CCR4H = 0x00; TIM1->CCR2L = 0x80;
-		
-		TIM1->BKR |= 0x80; // master output enable
+    TIM1->CCR4H = 0x00; TIM1->CCR2L = 0x80;
+    
+    TIM1->BKR |= 0x80; // master output enable
 
     // start the timer
     SetBit(TIM1->CR1,0);
