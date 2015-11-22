@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<project>
+  <fileVersion>2</fileVersion>
+  <configuration>
+    <name>Debug</name>
+    <toolchain>
+      <name>STM8</name>
+    </toolchain>
+    <debug>1</debug>
+  </configuration>
+  <configuration>
+    <name>Release</name>
+    <toolchain>
+      <name>STM8</name>
+    </toolchain>
+    <debug>0</debug>
+  </configuration>
+  <group>
+    <name>inc</name>
+    <file>
+      <name>$PROJ_DIR$\inc\adpcm.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\inc\stm8s.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\inc\stm8s_conf.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\inc\stm8s_it.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\inc\stm8s_type.h</name>
+    </file>
+  </group>
+  <group>
+    <name>src</name>
+    <file>
+      <name>$PROJ_DIR$\src\adpcm.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\src\crts.s</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\src\main.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\src\stm8_interrupt_vector.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\src\stm8s_it.c</name>
+    </file>
+  </group>
+</project>
+
+
