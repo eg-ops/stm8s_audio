@@ -1,23 +1,29 @@
 /**
   ******************************************************************************
-  * @file stm8s_it.h
-  * @brief This file contains the external declarations of the interrupt routines.
-  * @author STMicroelectronics - MCD Application Team
-  * @version V1.0.1
-  * @date 09/22/2008
-  ******************************************************************************
+  * @file    stm8s_it.h
+  * @author  MCD Application Team
+  * @version V2.2.0
+  * @date    30-September-2014
+  * @brief   This file contains the headers of the interrupt handlers
+   ******************************************************************************
+  * @attention
   *
-  * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-  * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
-  * TIME. AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY
-  * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
-  * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
-  * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
-  * <h2><center>&copy; COPYRIGHT 2008 STMicroelectronics</center></h2>
-  * @image html logo.bmp
+  * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+  * You may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at:
+  *
+  *        http://www.st.com/software_license_agreement_liberty_v2
+  *
+  * Unless required by applicable law or agreed to in writing, software 
+  * distributed under the License is distributed on an "AS IS" BASIS, 
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  *
   ******************************************************************************
-  */
+  */ 
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM8S_IT_H
@@ -30,39 +36,87 @@
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
+#ifdef _COSMIC_
+ void _stext(void); /* RESET startup routine */
+ INTERRUPT void NonHandledInterrupt(void);
+#endif /* _COSMIC_ */
 
-extern void @far NonHandledInterrupt(void);
-extern void @far EEPROM_EEC_IRQHandler(void); /* EEPROM ECC CORRECTION */
-extern void @far TIM4_UPD_OVF_IRQHandler(void); /* TIM4 UPD/OVF */
-extern void @far ADC1_IRQHandler(void); /* ADC1 */
-extern void @far ADC2_IRQHandler(void); /* ADC2 */
-extern void @far UART3_RX_IRQHandler(void); /* UART3 RX */
-extern void @far UART3_TX_IRQHandler(void); /* UART3 TX */
-extern void @far UART2_RX_IRQHandler(void); /* UART2 RX */
-extern void @far UART2_TX_IRQHandler(void); /* UART2 TX */
-extern void @far I2C_IRQHandler(void); /* I2C */
-extern void @far UART1_RX_IRQHandler(void); /* UART1 RX */
-extern void @far UART1_TX_IRQHandler(void); /* UART1 TX */
-extern void @far TIM3_CAP_COM_IRQHandler(void); /* TIM3 CAP/COM */
-extern void @far TIM3_UPD_OVF_BRK_IRQHandler(void); /* TIM3 UPD/OVF/BRK */
-extern void @far TIM2_CAP_COM_IRQHandler(void); /* TIM2 CAP/COM */
-extern void @far TIM2_UPD_OVF_BRK_IRQHandler(void); /* TIM2 UPD/OVF/BRK */
-extern void @far TIM1_CAP_COM_IRQHandler(void); /* TIM1 CAP/COM */
-extern void @far TIM1_UPD_OVF_TRG_BRK_IRQHandler(void); /* TIM1 UPD/OVF/TRG/BRK */
-extern void @far SPI_IRQHandler(void); /* SPI */
-extern void @far CAN_TX_IRQHandler(void); /* CAN TX/SCE */
-extern void @far CAN_RX_IRQHandler(void); /* CAN RX */
-extern void @far EXTI_PORTE_IRQHandler(void); /* EXTI PORTE */
-extern void @far EXTI_PORTD_IRQHandler(void); /* EXTI PORTD */
-extern void @far EXTI_PORTC_IRQHandler(void); /* EXTI PORTC */
-extern void @far EXTI_PORTB_IRQHandler(void); /* EXTI PORTB */
-extern void @far EXTI_PORTA_IRQHandler(void); /* EXTI PORTA */
-extern void @far CLK_IRQHandler(void); /* CLOCK */
-extern void @far AWU_IRQHandler(void); /* AWU */
-extern void @far TLI_IRQHandler(void); /* TLI */
-extern void @far TRAP_IRQHandler(void); /* TRAP */
-extern void @far _stext(void); /* RESET startup routine */
+#ifndef _RAISONANCE_
+ INTERRUPT void TRAP_IRQHandler(void); /* TRAP */
+ INTERRUPT void TLI_IRQHandler(void); /* TLI */
+ INTERRUPT void AWU_IRQHandler(void); /* AWU */
+ INTERRUPT void CLK_IRQHandler(void); /* CLOCK */
+ INTERRUPT void EXTI_PORTA_IRQHandler(void); /* EXTI PORTA */
+ INTERRUPT void EXTI_PORTB_IRQHandler(void); /* EXTI PORTB */
+ INTERRUPT void EXTI_PORTC_IRQHandler(void); /* EXTI PORTC */
+ INTERRUPT void EXTI_PORTD_IRQHandler(void); /* EXTI PORTD */
+ INTERRUPT void EXTI_PORTE_IRQHandler(void); /* EXTI PORTE */
+
+#if defined(STM8S903) || defined(STM8AF622x)
+ INTERRUPT void EXTI_PORTF_IRQHandler(void); /* EXTI PORTF */
+#endif /* (STM8S903) || (STM8AF622x) */
+
+#if defined (STM8S208) || defined (STM8AF52Ax)
+ INTERRUPT void CAN_RX_IRQHandler(void); /* CAN RX */
+ INTERRUPT void CAN_TX_IRQHandler(void); /* CAN TX/ER/SC */
+#endif /* (STM8S208) || (STM8AF52Ax) */
+
+ INTERRUPT void SPI_IRQHandler(void); /* SPI */
+ INTERRUPT void TIM1_CAP_COM_IRQHandler(void); /* TIM1 CAP/COM */
+ INTERRUPT void TIM1_UPD_OVF_TRG_BRK_IRQHandler(void); /* TIM1 UPD/OVF/TRG/BRK */
+
+#if defined(STM8S903) || defined(STM8AF622x)
+ INTERRUPT void TIM5_UPD_OVF_BRK_TRG_IRQHandler(void); /* TIM5 UPD/OVF/BRK/TRG */
+ INTERRUPT void TIM5_CAP_COM_IRQHandler(void); /* TIM5 CAP/COM */
+#else /* (STM8S208) || (STM8S207) || (STM8S105) || (STM8S103) || (STM8AF52Ax) || (STM8AF62Ax) || (STM8A626x) */
+ INTERRUPT void TIM2_UPD_OVF_BRK_IRQHandler(void); /* TIM2 UPD/OVF/BRK */
+ INTERRUPT void TIM2_CAP_COM_IRQHandler(void); /* TIM2 CAP/COM */
+#endif /* (STM8S903) || (STM8AF622x) */
+
+#if defined (STM8S208) || defined(STM8S207) || defined(STM8S007) || defined(STM8S105) || \
+    defined(STM8S005) ||  defined (STM8AF52Ax) || defined (STM8AF62Ax) || defined (STM8AF626x)
+ INTERRUPT void TIM3_UPD_OVF_BRK_IRQHandler(void); /* TIM3 UPD/OVF/BRK */
+ INTERRUPT void TIM3_CAP_COM_IRQHandler(void); /* TIM3 CAP/COM */
+#endif /* (STM8S208) || (STM8S207) || (STM8S105) || (STM8AF52Ax) || (STM8AF62Ax) || (STM8A626x) */
+
+#if defined (STM8S208) || defined(STM8S207) || defined(STM8S007) || defined(STM8S103) || \
+    defined(STM8S003) ||  defined (STM8AF52Ax) || defined (STM8AF62Ax) || defined (STM8S903)
+ INTERRUPT void UART1_TX_IRQHandler(void); /* UART1 TX */
+ INTERRUPT void UART1_RX_IRQHandler(void); /* UART1 RX */
+#endif /* (STM8S208) || (STM8S207) || (STM8S903) || (STM8S103) || (STM8AF52Ax) || (STM8AF62Ax) */
+
+#if defined (STM8AF622x)
+ INTERRUPT void UART4_TX_IRQHandler(void); /* UART4 TX */
+ INTERRUPT void UART4_RX_IRQHandler(void); /* UART4 RX */
+#endif /* (STM8AF622x) */
+ 
+ INTERRUPT void I2C_IRQHandler(void); /* I2C */
+
+#if defined(STM8S105) || defined(STM8S005) ||  defined (STM8AF626x)
+ INTERRUPT void UART2_RX_IRQHandler(void); /* UART2 RX */
+ INTERRUPT void UART2_TX_IRQHandler(void); /* UART2 TX */
+#endif /* (STM8S105) || (STM8AF626x) */
+
+#if defined(STM8S207) || defined(STM8S007) || defined(STM8S208) || defined (STM8AF52Ax) || defined (STM8AF62Ax)
+ INTERRUPT void UART3_RX_IRQHandler(void); /* UART3 RX */
+ INTERRUPT void UART3_TX_IRQHandler(void); /* UART3 TX */
+#endif /* (STM8S207) || (STM8S208) || (STM8AF62Ax) || (STM8AF52Ax) */
+
+#if defined(STM8S207) || defined(STM8S007) || defined(STM8S208) || defined (STM8AF52Ax) || defined (STM8AF62Ax)
+ INTERRUPT void ADC2_IRQHandler(void); /* ADC2 */
+#else /* (STM8S105) || (STM8S103) || (STM8S903) || (STM8AF622x) */
+ INTERRUPT void ADC1_IRQHandler(void); /* ADC1 */
+#endif /* (STM8S207) || (STM8S208) || (STM8AF62Ax) || (STM8AF52Ax) */
+
+#if defined(STM8S903) || defined(STM8AF622x)
+ INTERRUPT void TIM6_UPD_OVF_TRG_IRQHandler(void); /* TIM6 UPD/OVF/TRG */
+#else /* (STM8S208) || (STM8S207) || (STM8S105) || (STM8S103) || (STM8AF62Ax) || (STM8AF52Ax) || (STM8AF626x) */
+ INTERRUPT void TIM4_UPD_OVF_IRQHandler(void); /* TIM4 UPD/OVF */
+#endif /* (STM8S903) || (STM8AF622x) */
+ INTERRUPT void EEPROM_EEC_IRQHandler(void); /* EEPROM ECC CORRECTION */
+#endif /* _RAISONANCE_ */
 
 #endif /* __STM8S_IT_H */
 
-/******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

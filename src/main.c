@@ -7,12 +7,16 @@
 
 #include "stm8s.h"
 #include "adpcm.h"
+#include "stm8s_type.h"
 #include <stdio.h>
+#include "stm8s_tim1.h"
 
 #ifdef __CSMC__ /* COSMIC */
   extern const @far unsigned char rawData[ADPCMDATA_DIM]; 
-#else /* _RAISONANCE_ */
+#elseif _RAISONANCE_
 	extern fcode const unsigned char rawData[ADPCMDATA_DIM];
+#else 
+    const unsigned char rawData[ADPCMDATA_DIM];
 #endif /* _COSMIC_ */
 
 u32 position = 0;
@@ -47,7 +51,7 @@ void TIM1_Init (void)
 //-----------------------------------------------------------------------------
 {
     // control registers settings
-    TIM1->CR1 = 0b10000000;
+    TIM1->CR1 = TIM1_CR1_ARPE;
     // prescaler to fclk/1
     TIM1->PSCRH = 0x00;
 		TIM1->PSCRL = 0x00;
@@ -62,20 +66,20 @@ void TIM1_Init (void)
     TIM1->CCER1 = 0x00;
     TIM1->CCER2 = 0x00;
     // capture/compare mode registers (CC3, CC4 to PWM mode 1, preload enabled)
-    TIM1->CCMR1 = 0b00000000;
-    TIM1->CCMR2 = 0b00000000;
-    TIM1->CCMR3 = 0b01101000;
-		TIM1->CCMR4 = 0b01101000;
+    TIM1->CCMR1 = TIM1_CCMR1_RESET_VALUE;
+    TIM1->CCMR2 = TIM1_CCMR2_RESET_VALUE;
+    TIM1->CCMR3 = TIM1_OCMODE_PWM1 | TIM1_CCMR_OCxPE;
+    TIM1->CCMR4 = TIM1_OCMODE_PWM1 | TIM1_CCMR_OCxPE;
 
 		//clear the counter
-    TIM1->EGR |= 0b00100001;
+    TIM1->EGR |= TIM1_EGR_COMG | TIM1_EGR_UG;
 
 		// clear status registers
     TIM1->SR1 = 0x00;
     TIM1->SR2 = 0x00;
 
     // enable update interrupt (overflow)
-    TIM1->IER = 0b00000001;
+    TIM1->IER = TIM1_IER_UIE;
 
 		// enable CC3, CC4 output
     SetBit(TIM1->CCER2,0);
